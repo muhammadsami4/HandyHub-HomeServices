@@ -1,0 +1,39 @@
+services:
+  - type: web
+    name: handyhub-homeservices
+    env: docker
+    plan: free
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: APP_ENV
+        value: production
+      - key: APP_DEBUG
+        value: "false"
+      - key: APP_KEY
+        sync: false   # you'll paste this manually after generating it locally
+      - key: DB_CONNECTION
+        value: pgsql
+      - key: DB_HOST
+        fromDatabase:
+          name: handyhub-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: handyhub-db
+          property: port
+      - key: DB_DATABASE
+        fromDatabase:
+          name: handyhub-db
+          property: database
+      - key: DB_USERNAME
+        fromDatabase:
+          name: handyhub-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: handyhub-db
+          property: password
+
+databases:
+  - name: handyhub-db
+    plan: free
