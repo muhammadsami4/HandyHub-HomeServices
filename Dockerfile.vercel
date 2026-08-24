@@ -1,0 +1,193 @@
+# ============================================================
+# HandyHub - Laravel 12 + PHP 8.2 + Vite
+# Vercel Container Deployment
+# ============================================================
+
+# ------------------------------------------------------------
+# Stage 1: Build frontend assets
+# ------------------------------------------------------------
+FROM node:22-alpine AS frontend
+
+WORKDIR /app
+
+# Your repository currently has package.json but no package-lock.json,
+# so use npm install instead of npm ci.
+COPY package.json ./
+
+RUN npm install
+
+# Copy the project files needed by Vite
+COPY . .
+
+# Build Laravel/Vite production assets
+RUN npm run build
+
+
+# ------------------------------------------------------------
+# Stage 2: Install PHP/Composer dependencies
+# ------------------------------------------------------------
+FROM composer:2 AS composer
+
+WORKDIR /app
+
+# Copy Composer files first for better Docker layer caching
+COPY composer.json composer.lock ./
+
+# Install production PHP dependencies
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-progress \
+    --no-scripts
+
+
+# ------------------------------------------------------------
+# Stage 3: Production Laravel application
+# ------------------------------------------------------------
+FROM dunglas/frankenphp:php8.2-bookworm
+
+WORKDIR /app
+
+# Use PHP production configuration
+RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Laravel / HandyHub PHP extensions
+RUN install-php-extensions \
+    pdo_mysql \
+    mbstring \
+    bcmath \
+    intl \
+    zip \
+    exif \
+    pcntl \
+    opcache
+
+# Copy the complete Laravel application
+COPY . /app
+
+# Copy Composer dependencies from Composer stage
+COPY --from=composer /app/vendor /app/vendor
+
+# Copy compiled Vite assets from Node stage
+COPY --from=frontend /app/public/build /app/public/build
+
+# Make Laravel runtime directories available
+RUN mkdir -p \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
+
+# Set appropriate permissions
+RUN chmod -R 775 storage bootstrap/cache
+
+# Laravel's public directory is the web root
+ENV SERVER_ROOT=/app/public
+
+# Vercel containers use HTTP.
+# Port 80 is Vercel's default container port.
+ENV SERVER_NAME=:80
+
+EXPOSE 80
+
+# Start FrankenPHP
+CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]# ============================================================
+# HandyHub - Laravel 12 + PHP 8.2 + Vite
+# Vercel Container Deployment
+# ============================================================
+
+# ------------------------------------------------------------
+# Stage 1: Build frontend assets
+# ------------------------------------------------------------
+FROM node:22-alpine AS frontend
+
+WORKDIR /app
+
+# Your repository currently has package.json but no package-lock.json,
+# so use npm install instead of npm ci.
+COPY package.json ./
+
+RUN npm install
+
+# Copy the project files needed by Vite
+COPY . .
+
+# Build Laravel/Vite production assets
+RUN npm run build
+
+
+# ------------------------------------------------------------
+# Stage 2: Install PHP/Composer dependencies
+# ------------------------------------------------------------
+FROM composer:2 AS composer
+
+WORKDIR /app
+
+# Copy Composer files first for better Docker layer caching
+COPY composer.json composer.lock ./
+
+# Install production PHP dependencies
+RUN composer install \
+    --no-dev \
+    --no-interaction \
+    --prefer-dist \
+    --optimize-autoloader \
+    --no-progress \
+    --no-scripts
+
+
+# ------------------------------------------------------------
+# Stage 3: Production Laravel application
+# ------------------------------------------------------------
+FROM dunglas/frankenphp:php8.2-bookworm
+
+WORKDIR /app
+
+# Use PHP production configuration
+RUN cp "$PHP_INI_DIR/php.ini-production" "$PHP_INI_DIR/php.ini"
+
+# Laravel / HandyHub PHP extensions
+RUN install-php-extensions \
+    pdo_mysql \
+    mbstring \
+    bcmath \
+    intl \
+    zip \
+    exif \
+    pcntl \
+    opcache
+
+# Copy the complete Laravel application
+COPY . /app
+
+# Copy Composer dependencies from Composer stage
+COPY --from=composer /app/vendor /app/vendor
+
+# Copy compiled Vite assets from Node stage
+COPY --from=frontend /app/public/build /app/public/build
+
+# Make Laravel runtime directories available
+RUN mkdir -p \
+    storage/framework/cache \
+    storage/framework/sessions \
+    storage/framework/views \
+    storage/logs \
+    bootstrap/cache
+
+# Set appropriate permissions
+RUN chmod -R 775 storage bootstrap/cache
+
+# Laravel's public directory is the web root
+ENV SERVER_ROOT=/app/public
+
+# Vercel containers use HTTP.
+# Port 80 is Vercel's default container port.
+ENV SERVER_NAME=:80
+
+EXPOSE 80
+
+# Start FrankenPHP
+CMD ["frankenphp", "run", "--config", "/etc/frankenphp/Caddyfile"]
