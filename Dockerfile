@@ -1,3 +1,4 @@
+# HandyHub Laravel App - Build v2
 # ─── Stage 1: Build Vite Frontend Assets ───
 FROM node:20-alpine AS assets
 
