@@ -1,4 +1,4 @@
-# --- Stage 1: Build frontend assets (Vite) ---
+# ─── Stage 1: Build Vite Frontend Assets ───
 FROM node:20-alpine AS assets
 
 WORKDIR /app
@@ -10,12 +10,13 @@ COPY . .
 RUN npm run build
 
 
-# --- Stage 2: PHP app ---
-FROM php:8.2-cli
+# ─── Stage 2: PHP Laravel App ───
+FROM php:8.2-apache
 
-# System dependencies + PHP extensions required by Laravel
+# Install system dependencies + PHP extensions
 RUN apt-get update && apt-get install -y \
     git \
+    curl \
     unzip \
     zip \
     libzip-dev \
@@ -31,34 +32,52 @@ RUN apt-get update && apt-get install -y \
     xml \
     && rm -rf /var/lib/apt/lists/*
 
-
-# Composer
+# Install Composer
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app
+# Set working directory
+WORKDIR /var/www/html
 
+# Copy project files
 COPY . .
 
-# Copy built Vite assets
+# Copy built Vite assets from Stage 1
 COPY --from=assets /app/public/build ./public/build
 
-
-# Install Laravel dependencies
+# Install Laravel PHP dependencies
 RUN composer install \
     --no-dev \
     --optimize-autoloader \
     --no-interaction
 
+# Set correct permissions
+RUN chown -R www-data:www-data /var/www/html \
+    && chmod -R 775 storage bootstrap/cache
 
-# Laravel writable directories
-RUN chmod -R 775 storage bootstrap/cache
+# Configure Apache to serve Laravel public folder
+ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 
+RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' \
+    /etc/apache2/sites-available/*.conf
 
-EXPOSE 8080
+RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' \
+    /etc/apache2/apache2.conf \
+    /etc/apache2/conf-available/*.conf
 
+# Enable Apache mod_rewrite (required for Laravel routes)
+RUN a2enmod rewrite
 
-# Start Laravel
-CMD php artisan config:cache \
-    && php artisan migrate --force \
-    && php artisan serve --host=0.0.0.0 --port ${PORT:-8080}
-# Docker rebuild
+# Create .env from example if not exists
+RUN cp -n .env.example .env || true
+
+# Generate app key
+RUN php artisan key:generate --force
+
+EXPOSE 80
+
+# Start: cache config, run migrations, start Apache
+CMD bash -c "php artisan config:cache && \
+             php artisan route:cache && \
+             php artisan view:cache && \
+             php artisan migrate --force && \
+             apache2-foreground"
