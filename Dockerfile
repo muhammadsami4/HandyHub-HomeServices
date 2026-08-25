@@ -1,4 +1,4 @@
-# HandyHub Laravel App - Build v2
+# HandyHub Laravel App - Build v3
 # ─── Stage 1: Build Vite Frontend Assets ───
 FROM node:20-alpine AS assets
 
@@ -45,6 +45,20 @@ COPY . .
 # Copy built Vite assets from Stage 1
 COPY --from=assets /app/public/build ./public/build
 
+# ✅ Set ENV variables during build to prevent null errors
+ENV APP_ENV=production
+ENV APP_DEBUG=false
+ENV BROADCAST_CONNECTION=log
+ENV REVERB_APP_ID=handyhub-app-id
+ENV REVERB_APP_KEY=handyhub-app-key
+ENV REVERB_APP_SECRET=handyhub-app-secret
+ENV REVERB_HOST=localhost
+ENV REVERB_PORT=8080
+ENV REVERB_SCHEME=http
+
+# Create .env from example
+RUN cp -n .env.example .env || true
+
 # Install Laravel PHP dependencies
 RUN composer install \
     --no-dev \
@@ -67,9 +81,6 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' \
 
 # Enable Apache mod_rewrite (required for Laravel routes)
 RUN a2enmod rewrite
-
-# Create .env from example if not exists
-RUN cp -n .env.example .env || true
 
 # Generate app key
 RUN php artisan key:generate --force
