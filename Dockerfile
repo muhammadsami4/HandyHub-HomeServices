@@ -88,4 +88,8 @@ RUN php artisan key:generate --force
 EXPOSE 80
 
 # Start: cache config, run migrations, start Apache
-CMD ["bash", "-c", "php artisan config:cache && php artisan route:cache && php artisan view:cache && php artisan migrate --force && apache2-foreground"]
+CMD bash -c "php artisan config:cache && \
+             php artisan route:cache && \
+             php artisan view:cache && \
+             php artisan migrate --force && \
+             apache2-foreground"
