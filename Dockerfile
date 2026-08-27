@@ -63,7 +63,8 @@ RUN cp -n .env.example .env || true
 RUN composer install \
     --no-dev \
     --optimize-autoloader \
-    --no-interaction
+    --no-interaction \
+    --no-scripts
 
 # Set correct permissions
 RUN chown -R www-data:www-data /var/www/html \
@@ -85,11 +86,13 @@ RUN a2enmod rewrite
 # Generate app key
 RUN php artisan key:generate --force
 
-EXPOSE 80
+# Laravel writable directories
+RUN chmod -R 775 storage bootstrap/cache 
+
+EXPOSE 8080
 
 # Start: cache config, run migrations, start Apache
-CMD bash -c "php artisan config:cache && \
-             php artisan route:cache && \
-             php artisan view:cache && \
-             php artisan migrate --force && \
-             apache2-foreground"
+CMD php artisan package:discover --ansi \
+    && php artisan config:cache \
+    && php artisan migrate --force \
+    && php artisan serve --host=0.0.0.0 --port ${PORT:-8080}
