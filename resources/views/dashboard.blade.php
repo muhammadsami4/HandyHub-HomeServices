@@ -214,7 +214,7 @@
         {{-- Users Row --}}
         <div class="dash-section-title"><i class=""></i>User Overview</div>
         <div class="row g-4 mb-4">
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-indigo">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Total Users</div>
@@ -222,7 +222,7 @@
                     <div class="s-sub">All registered users</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-blue">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Admins</div>
@@ -230,7 +230,7 @@
                     <div class="s-sub">Platform administrators</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-teal">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Seekers</div>
@@ -238,7 +238,7 @@
                     <div class="s-sub">Service seekers</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-orange">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Providers</div>
@@ -251,7 +251,7 @@
         {{-- Verification Row --}}
         <div class="dash-section-title"><i class=""></i>Verification Status</div>
         <div class="row g-4 mb-4">
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-green">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Seeker Verified</div>
@@ -259,7 +259,7 @@
                     <div class="s-sub">Verified seekers</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-amber">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Seeker Pending</div>
@@ -267,7 +267,7 @@
                     <div class="s-sub">Awaiting verification</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-emerald">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Provider Verified</div>
@@ -275,7 +275,7 @@
                     <div class="s-sub">Verified providers</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-pink">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Provider Pending</div>
@@ -287,7 +287,7 @@
 
         {{-- Quick Links --}}
         <div class="row g-4">
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
                 <div class="quick-card">
                     <h5><i class=""></i>Quick Actions</h5>
                     <a href="{{ route('admin.users') }}" class="btn-quick">
@@ -315,7 +315,7 @@
         {{-- Stats Row --}}
         <div class="dash-section-title"><i class=""></i>My Performance</div>
         <div class="row g-4 mb-4">
-            <div class="col-xl-4 col-md-6">
+            <div class="col-6 col-md-6 col-xl-4">
                 <div class="stat-card gc-green">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">My Accepted</div>
@@ -323,7 +323,7 @@
                     <div class="s-sub">Requests I accepted</div>
                 </div>
             </div>
-            <div class="col-xl-4 col-md-6">
+            <div class="col-6 col-md-6 col-xl-4">
                 <div class="stat-card gc-slate">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">My Rejected</div>
@@ -331,7 +331,7 @@
                     <div class="s-sub">Requests I rejected</div>
                 </div>
             </div>
-            <div class="col-xl-4 col-md-6">
+            <div class="col-6 col-md-6 col-xl-4">
                 <div class="stat-card gc-amber">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Available</div>
@@ -343,7 +343,7 @@
 
         {{-- Profile + Quick Links --}}
         <div class="row g-4">
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
                 <div class="profile-card">
                     <h5><i class=""></i>My Profile Status</h5>
                     @if($myProfile)
@@ -381,7 +381,7 @@
                     @endif
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
                 <div class="quick-card">
                     <h5><i class=""></i>Quick Links</h5>
                     <a href="{{ route('provider.requests') }}" class="btn-quick">
@@ -412,7 +412,7 @@
         {{-- Stats Row --}}
         <div class="dash-section-title"><i class=""></i>My Requests Overview</div>
         <div class="row g-4 mb-4">
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-indigo">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Total Requests</div>
@@ -420,7 +420,7 @@
                     <div class="s-sub">All submitted requests</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-green">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Accepted</div>
@@ -428,7 +428,7 @@
                     <div class="s-sub">Accepted by provider</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-amber">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Pending</div>
@@ -436,7 +436,7 @@
                     <div class="s-sub">Awaiting provider response</div>
                 </div>
             </div>
-            <div class="col-xl-3 col-md-6">
+            <div class="col-6 col-md-6 col-xl-3">
                 <div class="stat-card gc-rose">
                     <div class=""><i class=""></i></div>
                     <div class="s-label">Rejected</div>
@@ -448,7 +448,7 @@
 
         {{-- Quick Links --}}
         <div class="row g-4">
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
                 <div class="quick-card">
                     <h5><i class=""></i>Quick Links</h5>
                     <a href="{{ route('seeker.requests') }}" class="btn-quick">
