@@ -172,7 +172,12 @@
     <nav class="navbar navbar-expand-lg fixed-top">
         <div class="container">
             <a class="navbar-brand" href="#"><i class="fas fa-tools me-2"></i>Handy Hub</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <button class="navbar-toggler" 
+                    type="button" 
+                    id="navbarToggle"
+                    aria-controls="navbarNav"
+                    aria-expanded="false"
+                    aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
@@ -280,42 +285,42 @@
                 <p class="text-muted">Comprehensive home maintenance solutions for Service Seekers</p>
             </div>
             <div class="row g-4">
-                <div class="col-md-4 reveal">
+                <div class="col-4 col-md-4 reveal">
                     <div class="service-card">
                         <div class="service-icon"><i class="fas fa-faucet"></i></div>
                         <h4>Plumbing</h4>
                         <p class="text-muted">Leak repairs, pipe installations, drain cleaning, and bathroom fittings by certified plumbers.</p>
                     </div>
                 </div>
-                <div class="col-md-4 reveal">
+                <div class="col-4 col-md-4 reveal">
                     <div class="service-card">
                         <div class="service-icon"><i class="fas fa-bolt"></i></div>
                         <h4>Electrical</h4>
                         <p class="text-muted">Wiring, fixture installation, panel upgrades, and emergency electrical repairs.</p>
                     </div>
                 </div>
-                <div class="col-md-4 reveal">
+                <div class="col-4 col-md-4 reveal">
                     <div class="service-card">
                         <div class="service-icon"><i class="fas fa-paint-roller"></i></div>
                         <h4>Painting</h4>
                         <p class="text-muted">Interior and exterior painting, wall preparation, and decorative finishes.</p>
                     </div>
                 </div>
-                <div class="col-md-4 reveal">
+                <div class="col-4 col-md-4 reveal">
                     <div class="service-card">
                         <div class="service-icon"><i class="fas fa-hammer"></i></div>
                         <h4>Carpentry</h4>
                         <p class="text-muted">Furniture repair, custom woodwork, door installations, and shelving.</p>
                     </div>
                 </div>
-                <div class="col-md-4 reveal">
+                <div class="col-4 col-md-4 reveal">
                     <div class="service-card">
                         <div class="service-icon"><i class="fas fa-wind"></i></div>
                         <h4>AC & HVAC</h4>
                         <p class="text-muted">AC installation, servicing, gas refilling, and heating system maintenance.</p>
                     </div>
                 </div>
-                <div class="col-md-4 reveal">
+                <div class="col-4 col-md-4 reveal">
                     <div class="service-card">
                         <div class="service-icon"><i class="fas fa-broom"></i></div>
                         <h4>Cleaning</h4>
@@ -788,6 +793,81 @@
 
     <script src="{{ asset('assets/js/home.js') }}"></script>
     <script src="{{ asset('assets/bootstap/bootstap.js') }}"></script>
+
+    {{-- Bootstrap CDN fallback (ensures toggle works on production) --}}
+    <script>
+        // If Bootstrap not loaded, load from CDN
+        if (typeof bootstrap === 'undefined') {
+            var s = document.createElement('script');
+            s.src = 'https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js';
+            document.head.appendChild(s);
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+
+            // ── Mobile Navbar Toggle ──
+            const navbarToggle = document.getElementById('navbarToggle');
+            const navbarNav = document.getElementById('navbarNav');
+
+            if (navbarToggle && navbarNav) {
+
+                navbarToggle.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    event.stopPropagation();
+
+                    const isOpen = navbarNav.classList.contains('show');
+
+                    if (isOpen) {
+                        navbarNav.classList.remove('show');
+                        navbarToggle.setAttribute('aria-expanded', 'false');
+                    } else {
+                        navbarNav.classList.add('show');
+                        navbarToggle.setAttribute('aria-expanded', 'true');
+                    }
+                });
+
+                // Close menu after clicking a navigation link
+                navbarNav.querySelectorAll('.nav-link').forEach(function (link) {
+                    link.addEventListener('click', function () {
+                        navbarNav.classList.remove('show');
+                        navbarToggle.setAttribute('aria-expanded', 'false');
+                    });
+                });
+
+                // Close menu when clicking outside the navbar
+                document.addEventListener('click', function (event) {
+                    const navbar = document.querySelector('.navbar');
+
+                    if (
+                        navbarNav.classList.contains('show') &&
+                        navbar &&
+                        !navbar.contains(event.target)
+                    ) {
+                        navbarNav.classList.remove('show');
+                        navbarToggle.setAttribute('aria-expanded', 'false');
+                    }
+                });
+            }
+
+            // ── Navbar background on scroll ──
+            window.addEventListener('scroll', function() {
+                const navbar = document.querySelector('.navbar');
+
+                if (navbar) {
+                    if (window.scrollY > 50) {
+                        navbar.style.background = 'rgba(15,15,26,0.98)';
+                        navbar.style.boxShadow  = '0 2px 20px rgba(0,0,0,0.3)';
+                    } else {
+                        navbar.style.background = 'rgba(15,15,26,0.85)';
+                        navbar.style.boxShadow  = 'none';
+                    }
+                }
+            });
+
+        });
+    </script>
 
 <script>
 /* ═══════════════════════════════════
