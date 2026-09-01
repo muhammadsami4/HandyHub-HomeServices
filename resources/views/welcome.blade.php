@@ -164,6 +164,204 @@
     backdrop-filter: blur(12px) !important;
     border-bottom: 1px solid rgba(255,255,255,0.06) !important;
 }
+
+/* ═══════════════════════════════════════════════
+   MOBILE UI — HOW IT WORKS
+   Keeps the desktop design but makes the mobile
+   layout clean, balanced and easy to read.
+═══════════════════════════════════════════════ */
+
+@media (max-width: 991.98px) {
+
+    /* Keep both sections in the same mobile pattern:
+       IMAGE → heading/badge → 3 steps */
+    .hiw-seeker-row,
+    .hiw-provider-row {
+        display: flex;
+        flex-direction: column !important;
+        gap: 28px !important;
+        margin-bottom: 45px !important;
+    }
+
+    .hiw-seeker-row > .col-lg-6,
+    .hiw-provider-row > .col-lg-6 {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Image comes first on mobile */
+    .hiw-seeker-row > .col-lg-6:last-child,
+    .hiw-provider-row > .col-lg-6:last-child {
+        order: 1;
+    }
+
+    /* Steps/content comes after image */
+    .hiw-seeker-row > .col-lg-6:first-child,
+    .hiw-provider-row > .col-lg-6:first-child {
+        order: 2;
+    }
+
+    .hiw-img-wrap {
+        width: 100%;
+        margin: 0 auto;
+    }
+
+    .hiw-img-wrap img {
+        width: 100%;
+        height: 230px;
+        object-fit: cover;
+        border-radius: 20px;
+        display: block;
+    }
+
+    /* Section heading */
+    .hiw-section .text-center.mb-5 {
+        margin-bottom: 35px !important;
+    }
+
+    .hiw-section .text-center.mb-5 h2 {
+        font-size: 1.8rem !important;
+        line-height: 1.25;
+    }
+
+    .hiw-section .text-center.mb-5 p {
+        font-size: 14px;
+        line-height: 1.6;
+        padding: 0 8px;
+    }
+
+    /* Badge */
+    .hiw-badge {
+        font-size: 10px;
+        padding: 6px 14px;
+        margin-bottom: 12px !important;
+    }
+
+    /* Main title for each audience */
+    .hiw-section h2.fw-bold.mb-4 {
+        font-size: 1.65rem !important;
+        line-height: 1.25;
+        margin-bottom: 24px !important;
+    }
+
+    /* Timeline */
+    .timeline-steps {
+        width: 100%;
+    }
+
+    .timeline-step {
+        gap: 14px;
+        padding-bottom: 24px;
+    }
+
+    /* Connecting line stays aligned with the circles */
+    .timeline-step:not(:last-child)::after {
+        left: 22px;
+        top: 46px;
+        height: calc(100% - 22px);
+    }
+
+    /* Step circles become slightly smaller */
+    .step-circle {
+        width: 46px;
+        height: 46px;
+        min-width: 46px;
+    }
+
+    .step-circle i {
+        font-size: 16px;
+    }
+
+    /* Step cards */
+    .step-content {
+        padding: 15px 16px;
+        border-radius: 14px;
+        min-width: 0;
+    }
+
+    .step-content::before {
+        left: -7px;
+        top: 14px;
+        width: 14px;
+        height: 14px;
+    }
+
+    .step-num-label {
+        font-size: 9px;
+    }
+
+    .step-content h5 {
+        font-size: 15px;
+        margin-bottom: 5px;
+    }
+
+    .step-content p {
+        font-size: 12.5px;
+        line-height: 1.55;
+    }
+
+    /* Divider */
+    .hiw-divider {
+        margin: 35px 0 45px;
+    }
+
+    .hiw-divider-icon {
+        width: 42px;
+        height: 42px;
+        font-size: 16px;
+    }
+}
+
+/* Extra-small phones */
+@media (max-width: 575.98px) {
+
+    .hiw-section {
+        padding-left: 0 !important;
+        padding-right: 0 !important;
+    }
+
+    .hiw-section > .container {
+        padding-left: 16px !important;
+        padding-right: 16px !important;
+    }
+
+    .hiw-img-wrap img {
+        height: 200px;
+        border-radius: 18px;
+    }
+
+    .hiw-section h2.fw-bold.mb-4 {
+        font-size: 1.5rem !important;
+    }
+
+    .timeline-step {
+        gap: 12px;
+    }
+
+    .step-circle {
+        width: 42px;
+        height: 42px;
+        min-width: 42px;
+    }
+
+    .timeline-step:not(:last-child)::after {
+        left: 20px;
+        top: 42px;
+    }
+
+    .step-content {
+        padding: 13px 14px;
+    }
+
+    .step-content h5 {
+        font-size: 14px;
+    }
+
+    .step-content p {
+        font-size: 12px;
+    }
+}
+
 </style>
 </head>
 <body>
@@ -526,7 +724,7 @@
             </div>
 
             {{-- ── FOR SEEKERS ── --}}
-            <div class="row align-items-center mb-5 g-5">
+            <div class="row align-items-center mb-5 g-5 hiw-seeker-row">
 
                 {{-- Steps (left) --}}
                 <div class="col-lg-6 reveal">
@@ -587,7 +785,7 @@
             </div>
 
             {{-- ── FOR PROVIDERS ── --}}
-            <div class="row align-items-center g-5 flex-row-reverse">
+            <div class="row align-items-center g-5 flex-row-reverse hiw-provider-row">
 
                 {{-- Steps (right) --}}
                 <div class="col-lg-6 reveal">
